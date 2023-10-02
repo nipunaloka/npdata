@@ -1,0 +1,45 @@
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+
+
+
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
+
+
+te = TransactionEncoder()
+te_array = te.fit(Dataset).transform(Dataset)
+
+
+df = pd.DataFrame(te_array, columns=te.columns_)
+df
+
+freq_item = apriori(df, min_support=0.6, use_colnames=True)
+freq_item
+
+res = association_rules(freq_item, metric='confidence', min_threshold=0.7)
+res
+
+res2 = res[['antecedents','consequents','support','confidence','lift']]
+res2
+
+
+res3 = res2[res2['confidence']>=1]
+
+-----------------------------------------------------------------------
+
+x = dataset.iloc[:,0:8].values
+
+from sklearn.cluster import KMeans
+wcss=[]
+for i in range(1,10):
+    kmeans1 = KMeans(n_clusters=i, init='k-means++')
+    kmeans1.fit(x)
+    wcss.append(kmeans1.inertia_)
+
+wcss
+
+
+plt.plot(range(1,10), wcss)
